@@ -1,0 +1,49 @@
+1. https://www.nginx.com/resources/glossary/nginx/
+2. https://en.wikipedia.org/wiki/C10k_problem
+3. https://trends.google.com/trends/explore?date=all&q=nginx
+4. https://panic.com/transmit/
+5. https://cyberduck.io/
+6. https://filezilla-project.org/
+7. https://fedoraproject.org/wiki/EPEL
+8. http://nginx.org/en/docs/configure.html
+9. https://www.freedesktop.org/wiki/Software/systemd/
+10. https://www.nginx.com/resources/wiki/start/topics/examples/initscripts/
+11. https://www.nginx.com/resources/wiki/start/topics/examples/systemd/
+12. http://nginx.org/en/docs/windows.html
+13. To install and launch Nginx on startup, we use:
+    brew install nginx
+    sudo brew services start nginx
+14. Install nginx in ubuntu from source
+    wget http://nginx.org/download/nginx-1.16.1.tar.gz
+    tar -zxvf nginx-1.16.1.tar.gz
+    cd nginx-1.16.1
+    apt-get install build-essential
+    ./configure
+    apt-get install libpcre3 libpcre3-dev zlib1g zlib1g-dev libssl-dev
+    ./configure
+    http://nginx.org/en/docs/configure.html
+    ./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module
+    make
+    make install
+    Save this file as /lib/systemd/system/nginx.service
+    Add this content
+    [Unit]
+Description=The NGINX HTTP and reverse proxy server
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=/run/nginx.pid
+ExecStartPre=/usr/sbin/nginx -t
+ExecStart=/usr/sbin/nginx
+ExecReload=/usr/sbin/nginx -s reload
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
+Then to test: systemctl start nginx
+
+15. To test nginx configuration
+nginx -t

@@ -47,3 +47,10 @@ Then to test: systemctl start nginx
 
 15. To test nginx configuration
 nginx -t
+
+16. Regex match is having more preference then prefix match.
+    Nginx order of priority is:
+    1. Exact match: = Uri
+    2. Preferential Prefix match:  ^~ Uri
+    3. Regex match: ~* Uri
+    4. Prefix match: Uri

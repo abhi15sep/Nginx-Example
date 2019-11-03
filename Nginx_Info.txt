@@ -54,3 +54,8 @@ nginx -t
     2. Preferential Prefix match:  ^~ Uri
     3. Regex match: ~* Uri
     4. Prefix match: Uri
+
+17. Nginx Docs: Variables
+http://nginx.org/en/docs/varindex.html
+Article: If Is Evil: https://www.nginx.com/resources/wiki/start/topics/depth/ifisevil/
+

@@ -137,3 +137,12 @@ nginx -V
 nginx -t
 systemctl reload nginx
 systemctl status nginx
+
+27. Headers & Expires
+It tells browser to cache image or css files , so that more requests to server can be avoided.
+
+28. Compressed responses with gzip
+Module ngx_http_gzip_module : http://nginx.org/en/docs/http/ngx_http_gzip_module.html
+Curl -I http://167.99.97.26/styles.css
+Curl -I -H "Accept-Encoding: gzip, dflate" http://167.99.97.26/styles.css
+Curl -H "Accept-Encoding: gzip, dflate" http://167.99.97.26/styles.css > styles.min.css

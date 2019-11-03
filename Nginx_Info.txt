@@ -103,3 +103,37 @@ C) Action directive
 
 23. Understanding and Implementing FastCGI Proxying in Nginx
 https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx
+
+24. Worker Processes
+To Find number of core : worker_processes
+lscpu
+nproc
+To find limit of open files (No. of connections each process worker can accept) worker_connections.
+There is a limit how many files can be opened for each CPU core.
+ulimit -n
+worker_processes * worker_connections = Max connections
+To change pid location in nginx.conf:
+pid /var/run/new_nginx.pid
+
+25. Buffer and timeouts
+Configuration file measurement units: http://nginx.org/en/docs/syntax.html
+What is Buffering ?
+When a process or a nginx worker reads data into memory before writing it to its next destination. 
+
+26. Adding dynamic module 
+http://nginx.org/en/docs/http/ngx_http_image_filter_module.html
+Command to check nginx current configuration :
+nginx -V 
+To See list of module available in current nginx source file directory
+./configure --help (lists all modules & flags available to configure)
+And to see dynamic module use Command
+./configure --help | grep dynamic
+To add new dynamic module:
+./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_image_filter_module=dynamic --modules-path=/etc/nginx/modules
+apt-get install libgd-dev
+make
+make install
+nginx -V
+nginx -t
+systemctl reload nginx
+systemctl status nginx

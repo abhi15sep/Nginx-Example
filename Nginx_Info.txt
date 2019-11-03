@@ -65,3 +65,24 @@ https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
 19. Rewrite and Redirect
 rewrite pattern Uri
 return status Uri
+
+20. try_files
+Ex: It can be used in server context or location context.
+server {
+    try_files path1 path2 final
+
+    location / {
+        try_files path1 path2 final;
+    }
+}
+It allows nginx to have check for a resource (path1), to respond with in any number of locations
+ relative to root directive, with final argument that results in rewrite and re-evaluation.
+ So only last argument works as rewrite and will use location directive, but all path before last 
+  will check relative location to root. i.e rootpath/path1
+
+  Named locations @ also can be used with try_files and it saves rewrite. 
+
+
+21. Error Log: http://nginx.org/en/docs/ngx_core_module.html#error_log
+Access Log: http://nginx.org/en/docs/http/ngx_http_log_module.html
+Configuring Logging: https://docs.nginx.com/nginx/admin-guide/monitoring/logging/

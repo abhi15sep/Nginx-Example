@@ -59,3 +59,9 @@ nginx -t
 http://nginx.org/en/docs/varindex.html
 Article: If Is Evil: https://www.nginx.com/resources/wiki/start/topics/depth/ifisevil/
 
+18. HTTP status code reference
+https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
+
+19. Rewrite and Redirect
+rewrite pattern Uri
+return status Uri

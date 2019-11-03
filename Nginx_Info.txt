@@ -86,3 +86,20 @@ It allows nginx to have check for a resource (path1), to respond with in any num
 21. Error Log: http://nginx.org/en/docs/ngx_core_module.html#error_log
 Access Log: http://nginx.org/en/docs/http/ngx_http_log_module.html
 Configuring Logging: https://docs.nginx.com/nginx/admin-guide/monitoring/logging/
+
+22. Inheritance and directive types
+server {
+    root /site/demo;
+
+    location {
+        #Inherited root
+        root /site/demo;
+    }
+}
+Three main directive types are:
+A) Standard directive
+B) Array directive
+C) Action directive
+
+23. Understanding and Implementing FastCGI Proxying in Nginx
+https://www.digitalocean.com/community/tutorials/understanding-and-implementing-fastcgi-proxying-in-nginx

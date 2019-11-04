@@ -184,3 +184,41 @@ apt-get install nghttp2-client
 Use: nghttp -nys https://167.99.93.27/index.html
      nghttp -nysa https://167.99.93.27/index.html
 HTTP/2 Server Push with NGINX 1.13.9: https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/
+
+33. HTTPS (SSL)
+Diffie–Hellman key exchange: https://en.wikipedia.org/wiki/Diffie%E2%80%93Hellman_key_exchange
+Algorithms Explained: Diffie-Hellman: https://hackernoon.com/algorithms-explained-diffie-hellman-1034210d5100
+Curl -Ik http://167.99.97.26, here k is to allow self signed certificates.
+How to generate DH parameters:
+openssl dhparam 2048 -out /etc/nginx/ssl/dhparam.pem  (Note: here size must be same as private key)
+
+34. Rate Limiting
+Load testing tool: https://www.joedog.org/siege-home/
+NGINX rate-limiting in a nutshell: https://www.freecodecamp.org/news/nginx-rate-limiting-in-a-nutshell-128fe9e0126c/
+Rate Limiting Nginx: https://www.nginx.com/blog/rate-limiting-nginx/
+apt-get install siege
+siege -v -r 2 -c 5 https://192.62.76.21/thumb.png
+
+35. Basic Auth
+apt-get install apache2-utils
+htpasswd -c /etc/nginx/.htpasswd user1
+
+36. Hardening Nginx
+./configure --help | grep without
+
+37. Lets encrypt - SSL certificate
+https://letsencrypt.org/
+https://certbot.eff.org/
+Lets encrypt 90 days lifetime: https://letsencrypt.org/2015/11/09/why-90-days.html
+certbot Docs: https://certbot.eff.org/docs/
+To install and configure certificate:
+certbot --help
+certbot --nginx
+To renew certificate:
+certbot renew
+To test force renewal: certbot renew --dry-run
+Certificate renewal can be done using cronttab:
+crontab -e
+@daily certbot renew
+crontab -l : To list all crontab
+

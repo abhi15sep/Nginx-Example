@@ -222,3 +222,18 @@ crontab -e
 @daily certbot renew
 crontab -l : To list all crontab
 
+===========================================================
+Reverse Proxy and Load balancing
+===========================================================
+38. Pre-requsite:
+List of static commandline servers: https://www.php.net/manual/en/features.commandline.webserver.php
+List of webserver: https://gist.github.com/willurd/5720255
+We can run nginx with different nginx.conf file at different location:
+nginx -c <nginx.conf file location>
+
+39. Reverse Proxy
+Nginx reverse proxy guide:
+https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/
+ngx_http_proxy_module:
+http://nginx.org/en/docs/http/ngx_http_proxy_module.html
+

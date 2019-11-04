@@ -146,3 +146,41 @@ Module ngx_http_gzip_module : http://nginx.org/en/docs/http/ngx_http_gzip_module
 Curl -I http://167.99.97.26/styles.css
 Curl -I -H "Accept-Encoding: gzip, dflate" http://167.99.97.26/styles.css
 Curl -H "Accept-Encoding: gzip, dflate" http://167.99.97.26/styles.css > styles.min.css
+
+29.FastCGI cache (micro cache)
+Module ngx_http_fastcgi_module: http://nginx.org/en/docs/http/ngx_http_fastcgi_module.html
+Apache Bench: https://httpd.apache.org/docs/2.4/programs/ab.html
+To install Apache bench: apt-get install apache2-utils  , to access: ab
+ab -n 100 -c 10 http://167.99.94.27, here n is numer of request and c is concurrent connections. 
+fastcgi_cache_path - filesystem location to store cache.
+$upstream_cache_status - can be added in response Headers to know about cache hit/miss.
+
+30. HTTP2:
+How To Create a Self-Signed SSL Certificate for Nginx in Ubuntu 16.04:
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-nginx-in-ubuntu-16-04
+benefits of nginx HTTP2 module:
+A) HTTP2 follows binary protocol.
+B) Compressed Headers
+C) Uses persistent connections.
+D) Multiplex streaming
+E) Server Push
+
+To enable http2 module:
+a. nginx -V 
+b. ./configure --help | grep http_v2
+c. ./configure --sbin-path=/usr/bin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --with-pcre --pid-path=/var/run/nginx.pid --with-http_ssl_module --with-http_image_filter_module=dynamic --modules-path=/etc/nginx/modules --with-http_v2_module
+d. make
+e. make install
+f. nginx -t
+g. systemctl restart nginx
+h. systemctl status nginx
+
+To generate openssl certificate:
+openssl req -x509 -days 10 -nodes -newkey rsa:2048 -keyout /etc/nginx/ssl/self.key -out /etc/nginx/ssl/self.crt
+
+32. Server Push
+Nghttp2: HTTP/2 C: https://nghttp2.org/
+apt-get install nghttp2-client
+Use: nghttp -nys https://167.99.93.27/index.html
+     nghttp -nysa https://167.99.93.27/index.html
+HTTP/2 Server Push with NGINX 1.13.9: https://www.nginx.com/blog/nginx-1-13-9-http2-server-push/

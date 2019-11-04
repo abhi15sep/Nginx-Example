@@ -236,4 +236,158 @@ Nginx reverse proxy guide:
 https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/
 ngx_http_proxy_module:
 http://nginx.org/en/docs/http/ngx_http_proxy_module.html
+To Pass header to clients & Backend:
+Add under location: add_header proxied nginx; (To send header to browser)
+                    proxy_set_header X-Real-IP $remote_addr; (To send this heaser to backend)
 
+40. Load Balancer:
+Using nginx as HTTP load balancer: http://nginx.org/en/docs/http/load_balancing.html
+Nginx LoadBalancing Guide: https://docs.nginx.com/nginx/admin-guide/load-balancer/http-load-balancer/
+ngx_http_upstream_module: http://nginx.org/en/docs/http/ngx_http_upstream_module.html
+
+http {
+
+    upstream php_servers {
+        server localhost:10001;
+        server localhost:10002;
+        server localhost:10003;
+    }
+
+    server {
+        listen 8888;
+
+        location / {
+            proxy_pass  'http://php_servers';
+        }
+    }
+}
+
+41. LoadBalancing options:
+Sticky Sessions (Ip hash):
+http {
+
+    upstream php_servers {
+        ip_hash;
+        server localhost:10001;
+        server localhost:10002;
+        server localhost:10003;
+    }
+
+    server {
+        listen 8888;
+
+        location / {
+            proxy_pass  'http://php_servers';
+        }
+    }
+}
+
+> LoadBalancing to servers based on least number of connections:
+http {
+
+    upstream php_servers {
+        least_conn;
+        server localhost:10001;
+        server localhost:10002;
+        server localhost:10003;
+    }
+
+    server {
+        listen 8888;
+
+        location / {
+            proxy_pass  'http://php_servers';
+        }
+    }
+}
+Then reload configuration: nginx -s reload
+
+42. Documentation & Resources:
+Nginx Documentation: http://nginx.org/en/docs/
+Common Pitfalls: https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+Digitalocean Tutorial: https://www.digitalocean.com/community/search?q=nginx
+WordPress Nginx: https://wordpress.org/support/article/nginx/
+Nginx Resoource: https://github.com/fcambus/nginx-resources
+
+========================================================
+Archive
+========================================================
+
+43. Adding an nginx init Service:
+Nginx Ubuntu init script: https://github.com/JasonGiedymin/nginx-init-ubuntu
+Nginx init Scripts: https://www.nginx.com/resources/wiki/start/topics/examples/initscripts/
+cd /etc/init.d/
+wget https://github.com/JasonGiedymin/nginx-init-ubuntu/blob/master/nginx
+sudo chmod +x nginx
+update-rc.d -f nginx defaults
+echo "NGINX_CONF_FILE=/etc/nginx/nginx.conf" > /etc/default/nginx
+echo "DAEMON=/usr/bin/nginx" >> /etc/default/nginx
+service nginx status
+service nginx start
+
+44. GeoIp
+GeoIp download: https://dev.maxmind.com/geoip/geoip2/geolite2/
+Nginx GeoIp modue: http://nginx.org/en/docs/http/ngx_http_geoip_module.html
+--with-http_geoip_module 
+apt-get install libgeoip-dev
+make
+make install
+nginx -V
+service nginx reload
+We need to download GeoIp database:
+mkdir /etc/nginx/geoip
+cd /etc/nginx/geoip
+wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
+wget https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz
+gunzip GeoLite2-City.tar.gz
+gunzip GeoLite2-Country.tar.gz
+In Nginx:
+
+http {
+
+    #GeoIp
+    geoip_country /etc/nginx/geoip;
+    geoip_city /etc/nginx/geoip/GeoLite2-Country.dat;
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass  'http://193.45.55.44/';
+        }
+
+        location /geo_country {
+            return 200 "$geoip_country_name";
+        }
+
+        location /geo_city {
+            return 200 "$geoip_city";
+        }
+    }
+}
+
+nginx -t
+service nginx reload
+
+45. Video streaming
+http://nginx.org/en/docs/http/ngx_http_mp4_module.html
+--with-http_mp4_module
+In Nginx:
+http {
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass  'http://193.45.55.44/';
+        }
+
+        location ~ \.mp4$ {
+            root /sites/downloads/;
+            mp4;
+            mp4_buffer_size 4M;
+            mp4_max_buffer_size 10M;
+        }
+    }
+}
+service nginx reload
